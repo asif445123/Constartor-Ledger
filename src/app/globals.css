@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #0b1220;
+  --color-bg-soft: #142235;
+  --color-paper: #faf7ef;
+  --color-paper-alt: #f1ead6;
+  --color-ink: #1b2130;
+  --color-ink-soft: #4a4f5e;
+  --color-line: #c9bfa6;
+  --color-accent: #e2a33d;
+  --color-accent-dark: #c07f1f;
+  --color-rust: #b14d33;
+  --color-green: #3e7c5a;
+  --font-display: "Noto Nastaliq Urdu";
+  --font-body: "Noto Nastaliq Urdu";
+  --font-mono: "Noto Nastaliq Urdu";
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-bg-soft: var(--color-bg-soft);
+  --color-paper: var(--color-paper);
+  --color-paper-alt: var(--color-paper-alt);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-dark: var(--color-accent-dark);
+  --color-rust: var(--color-rust);
+  --color-green: var(--color-green);
+  --color-muted: var(--color-muted);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display), serif;
+}
+
+.font-ledger {
+  font-family: var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Blueprint grid backdrop for the dark shell */
+.blueprint-grid {
+  background-image: linear-gradient(rgba(226, 163, 61, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 163, 61, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Corner tick marks - signature motif, evokes blueprint measurement marks */
+.tick-corners {
+  position: relative;
+}
+.tick-corners::before,
+.tick-corners::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--color-accent);
+  opacity: 0.55;
+}
+.tick-corners::before {
+  top: 6px;
+  right: 6px;
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+.tick-corners::after {
+  bottom: 6px;
+  left: 6px;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+/* Ledger table: margin rule like classic accounting paper */
+.ledger-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.ledger-table th {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  border-bottom: 2px solid var(--color-ink);
+  padding: 10px 12px;
+  text-align: start;
+  white-space: nowrap;
+}
+.ledger-table td {
+  border-bottom: 1px solid var(--color-line);
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  vertical-align: middle;
+}
+.ledger-table tbody tr:nth-child(even) {
+  background: var(--color-paper-alt);
+}
+.ledger-table tbody tr:hover {
+  background: rgba(226, 163, 61, 0.14);
+}
+.ledger-margin {
+  position: relative;
+}
+.ledger-margin::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 64px;
+  width: 2px;
+  background: var(--color-rust);
+  opacity: 0.35;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
