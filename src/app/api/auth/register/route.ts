@@ -12,17 +12,26 @@ export async function POST(req: NextRequest) {
     const { name, email, password } = await req.json();
 
     if (!name || !email || !password) {
-      return NextResponse.json({ message: t.fillNameEmailPassword }, { status: 400 });
+      return NextResponse.json(
+        { message: t.fillNameEmailPassword },
+        { status: 400 },
+      );
     }
     if (password.length < 6) {
-      return NextResponse.json({ message: t.passwordTooShort }, { status: 400 });
+      return NextResponse.json(
+        { message: t.passwordTooShort },
+        { status: 400 },
+      );
     }
 
     await connectDB();
 
     const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) {
-      return NextResponse.json({ message: t.emailAlreadyRegistered }, { status: 409 });
+      return NextResponse.json(
+        { message: t.emailAlreadyRegistered },
+        { status: 409 },
+      );
     }
 
     const hashed = await bcrypt.hash(password, 10);
@@ -46,25 +55,37 @@ export async function POST(req: NextRequest) {
           message: t.accountCreatedPending,
           pending: true,
         },
-        { status: 201 }
+        { status: 201 },
       );
     }
 
-    const token = generateToken({ userId: user._id.toString(), email: user.email, role: user.role });
+    const token = generateToken({
+      userId: user._id.toString(),
+      email: user.email,
+      role: user.role,
+    });
 
     const res = NextResponse.json({
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
     res.cookies.set(AUTH_COOKIE, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
     return res;
   } catch (error) {
     console.error("Register error:", error);
-    return NextResponse.json({ message: t.registerError, error }, { status: 500 });
+    return NextResponse.json(
+      { message: t.registerError, error },
+      { status: 500 },
+    );
   }
 }
