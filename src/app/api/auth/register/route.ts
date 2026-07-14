@@ -65,6 +65,6 @@ export async function POST(req: NextRequest) {
     return res;
   } catch (error) {
     console.error("Register error:", error);
-    return NextResponse.json({ message: t.registerError }, { status: 500 });
+    return NextResponse.json({ message: t.registerError, error }, { status: 500 });
   }
 }
