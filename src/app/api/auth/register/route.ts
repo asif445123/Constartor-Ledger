@@ -84,8 +84,13 @@ export async function POST(req: NextRequest) {
     return res;
   } catch (error) {
     console.error("Register error:", error);
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { message: t.registerError, error },
+      {
+        message: message.includes("MongoDB unavailable")
+          ? "Database connection failed. Please check your MongoDB Atlas whitelist and connection string."
+          : t.registerError,
+      },
       { status: 500 },
     );
   }

@@ -14,13 +14,16 @@ export async function connectDB() {
       return;
     }
 
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 20000,
+    });
 
-    // ✅ This will confirm exact DB name in terminal
     console.log("✅ Connected to DB:", mongoose.connection.db.databaseName);
     console.log("✅ Host:", mongoose.connection.host);
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error.message);
-    throw error;
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("❌ MongoDB connection error:", message);
+    throw new Error(`MongoDB unavailable: ${message}`);
   }
 }

@@ -72,6 +72,14 @@ export async function POST(req: NextRequest) {
     return res;
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json({ message: t.loginError }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json(
+      {
+        message: message.includes("MongoDB unavailable")
+          ? "Database connection failed. Please check your MongoDB Atlas whitelist and connection string."
+          : t.loginError,
+      },
+      { status: 500 },
+    );
   }
 }
