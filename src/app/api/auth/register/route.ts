@@ -36,10 +36,11 @@ export async function POST(req: NextRequest) {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    // The first account matching ADMIN_EMAIL bootstraps as an already-approved admin.
-    // Everyone else starts as "pending" and needs an admin to approve them.
+    // The first account becomes an approved admin automatically so a fresh deployment
+    // is usable immediately. Later accounts stay pending until approved.
     const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
-    const isBootstrapAdmin = !!adminEmail && email.toLowerCase() === adminEmail;
+    const existingUserCount = await User.countDocuments();
+    const isBootstrapAdmin = existingUserCount === 0 || (!!adminEmail && email.toLowerCase() === adminEmail);
 
     const user = await User.create({
       name,

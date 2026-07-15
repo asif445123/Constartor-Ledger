@@ -4,6 +4,7 @@ export function apiFetch(url: string, options: RequestInit = {}): Promise<Respon
   const locale = typeof window !== "undefined" ? localStorage.getItem("locale") || "ur" : "ur";
   return fetch(url, {
     ...options,
+    credentials: "include",
     headers: {
       ...(options.headers || {}),
       "X-Locale": locale,

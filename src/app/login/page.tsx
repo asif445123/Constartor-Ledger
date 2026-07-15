@@ -63,6 +63,7 @@ export default function LoginPage() {
       const result = await login(email, password);
       if (result.ok) {
         setMessage({ text: t.login.loggedIn, type: "success" });
+        router.replace("/");
       } else if (result.reason === "pending") {
         setScreen("pending");
       } else if (result.reason === "rejected") {
@@ -251,10 +252,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="auth-footer">
+        {/* <div className="auth-footer">
           <p className="verse-arabic">{t.login.verseArabic}</p>
           <p className="verse-translation">&quot;{t.login.verseTranslation}&quot;</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
