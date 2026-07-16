@@ -59,7 +59,7 @@ PATCH /api/admin/users/:id           { status: "approved" | "rejected" | "pendin
    ```
    MONGODB_URI=mongodb://localhost:27017/contract_management
    JWT_SECRET=change-this-to-something-long-and-random
-   ADMIN_EMAIL=you@yourdomain.com
+   ADMIN_EMAIL=https://constartor-ledger.onrender.com
    ```
    (`JWT_SECRET` falls back to `MY_SECRET_KEY` if unset — please set your own for anything beyond local testing.)
 3. Install & run:

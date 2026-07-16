@@ -8,7 +8,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import AppShell from "@/components/layout/AppShell";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yourdomain.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://constartor-ledger.onrender.com";
 
 const seo = {
   ur: {

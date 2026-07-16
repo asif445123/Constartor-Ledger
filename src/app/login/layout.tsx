@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yourdomain.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://constartor-ledger.onrender.com";
 
 const seo = {
   ur: {
