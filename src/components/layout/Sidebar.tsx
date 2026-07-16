@@ -34,7 +34,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="md:w-60 shrink-0 bg-[var(--color-bg)] blueprint-grid text-white flex md:flex-col md:min-h-screen">
+    <aside className="md:w-60 shrink-0 bg-[var(--color-bg)] blueprint-grid text-white flex flex-col md:min-h-screen">
       <div className="px-5 py-5 hidden md:block border-b border-white/10">
         <p className="font-ledger text-[10px] tracking-widest text-[var(--color-accent)]">
           {t.sidebar.siteLedgerLabel}
@@ -68,25 +68,27 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="hidden md:block px-5 py-4 border-t border-white/10">
+      <div className="px-4 py-3 md:px-5 md:py-4 border-t border-white/10">
         {user && !isDemo && (
-          <p className="text-white/50 text-xs mb-2 truncate">{t.sidebar.welcomeUser}, {user.name} <br /> · {user.email}</p>
+          <p className="text-white/50 text-xs mb-2 truncate">{t.sidebar.welcomeUser}, {user.name} <br className="hidden md:block" /> · {user.email}</p>
         )}
         {isDemo && (
           <p className="text-white/50 text-xs mb-2">{t.sidebar.demoUser}</p>
         )}
-        <button
-          onClick={() => setLocale(locale === "ur" ? "en" : "ur")}
-          className="text-white/60 hover:text-[var(--color-accent)] text-xs mb-2 block"
-        >
-          🌐 {locale === "ur" ? "English" : "اردو"}
-        </button>
-        <button
-          onClick={handleLogout}
-          className="text-white/60 hover:text-[var(--color-rust)] text-sm"
-        >
-          🚪 {t.sidebar.logout}
-        </button>
+        <div className="flex items-center gap-4 md:flex-col md:items-start md:gap-2">
+          <button
+            onClick={() => setLocale(locale === "ur" ? "en" : "ur")}
+            className="text-white/60 hover:text-[var(--color-accent)] text-xs"
+          >
+            🌐 {locale === "ur" ? "English" : "اردو"}
+          </button>
+          <button
+            onClick={handleLogout}
+            className="text-white/60 hover:text-[var(--color-rust)] text-sm"
+          >
+            🚪 {t.sidebar.logout}
+          </button>
+        </div>
       </div>
     </aside>
   );
