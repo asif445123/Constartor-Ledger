@@ -8,7 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { PageHeader, StatCard } from "@/components/ui/StatCard";
 import { PrimaryButton } from "@/components/ui/Field";
 import ExpenseFormModal from "@/components/expense/ExpenseFormModal";
-import { Expense } from "@/lib/types";
+import { Expense, getDisplayDayName } from "@/lib/types";
 import { DeleteIcon } from "@/components/ui/icons";
 
 export default function KharchaPage() {
@@ -69,7 +69,7 @@ export default function KharchaPage() {
       />
 
       <div className="bg-white rounded-lg border border-[var(--color-line)] overflow-x-auto">
-        <table dir={locale === "en" ? "ltr" : "rtl"} className="ledger-table" style={{ textAlign: locale === "en" ? "left" : "right" }}>
+        <table dir={locale === "en" ? "ltr" : "rtl"} className="ledger-table">
           <thead>
             <tr>
               <th>{t.kharcha.colDate}</th>
@@ -90,7 +90,7 @@ export default function KharchaPage() {
             {filtered.map((e) => (
               <tr key={e.id}>
                 <td>
-                  {e.date} <span className="text-[var(--color-ink-soft)]">({e.day})</span>
+                  {e.date} <span className="text-[var(--color-ink-soft)]">({getDisplayDayName(e.date, locale)})</span>
                 </td>
                 <td className="font-semibold">{e.site || "N/A"}</td>
                 <td>{e.name}</td>

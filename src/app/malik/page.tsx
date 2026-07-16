@@ -12,7 +12,7 @@ import OwnerFormModal from "@/components/owner/OwnerFormModal";
 import DealModal from "@/components/owner/DealModal";
 import ReceiptModal from "@/components/owner/ReceiptModal";
 import OwnerProfileModal from "@/components/owner/OwnerProfileModal";
-import { Owner } from "@/lib/types";
+import { Owner, getDisplayDayName } from "@/lib/types";
 import { DeleteIcon } from "@/components/ui/icons";
 
 type ModalKind = "form" | "deal" | "receipt" | "profile" | "dealHistory" | "receiptHistory" | null;
@@ -103,7 +103,7 @@ export default function MalikPage() {
       </div>
 
       <div className="bg-white rounded-lg border border-[var(--color-line)] overflow-x-auto">
-        <table dir={locale === "en" ? "ltr" : "rtl"} className="ledger-table" style={{ textAlign: locale === "en" ? "left" : "right" }}>
+        <table className="ledger-table">
           <thead>
             <tr>
               <th>{t.malik.colDate}</th>
@@ -172,7 +172,7 @@ export default function MalikPage() {
           .map((d) => (
             <>
               <span>
-                {d.date} <span className="text-[var(--color-ink-soft)]">({d.day})</span>
+                {d.date} <span className="text-[var(--color-ink-soft)]">({getDisplayDayName(d.date, locale)})</span>
               </span>
               <span className="font-ledger font-semibold">
                 {d.amount.toLocaleString()} <span className="text-[var(--color-ink-soft)] font-normal">— {d.desc || ""}</span>
@@ -191,7 +191,7 @@ export default function MalikPage() {
           .map((h) => (
             <>
               <span>
-                {h.date} <span className="text-[var(--color-ink-soft)]">({h.day})</span>
+                {h.date} <span className="text-[var(--color-ink-soft)]">({getDisplayDayName(h.date, locale)})</span>
               </span>
               <span className="font-ledger font-semibold">
                 {h.amount.toLocaleString()} <span className="text-[var(--color-ink-soft)] font-normal">({h.from || ""})</span>

@@ -65,9 +65,29 @@ export const DAY_NAMES_UR = [
   "ہفتہ",
 ];
 
+export const DAY_NAMES_EN = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 export function getDayName(dateString: string): string {
   const d = new Date(dateString);
   return DAY_NAMES_UR[d.getDay()] ?? "";
+}
+
+// Computes the day name straight from the date, in whichever language is
+// currently active. Used for display only — the stored `day` field on
+// records stays in Urdu (that's how it's saved to the database), this
+// just recalculates it fresh so English users see English day names.
+export function getDisplayDayName(dateString: string, locale: "ur" | "en"): string {
+  const d = new Date(dateString);
+  const names = locale === "en" ? DAY_NAMES_EN : DAY_NAMES_UR;
+  return names[d.getDay()] ?? "";
 }
 
 export function todayISO(): string {

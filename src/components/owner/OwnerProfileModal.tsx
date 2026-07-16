@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import html2canvas from "html2canvas";
 import Modal from "@/components/ui/Modal";
-import { Owner } from "@/lib/types";
+import { Owner, getDisplayDayName } from "@/lib/types";
 import { getOwnerDealInfo } from "@/context/DataContext";
 import { useToast } from "@/components/ui/Toast";
 import { useLanguage } from "@/context/LanguageContext";
@@ -77,7 +77,7 @@ export default function OwnerProfileModal({
     [t.ownerProfile.rowSite, owner.site],
     [t.ownerProfile.rowName, owner.name],
     [t.ownerProfile.rowDate, owner.date],
-    [t.ownerProfile.rowDay, owner.day],
+    [t.ownerProfile.rowDay, getDisplayDayName(owner.date, locale)],
     [t.ownerProfile.rowMobile, owner.mobile],
     [t.ownerProfile.rowPrevContract, `${baseContract.toLocaleString()} ${t.ownerProfile.rupees}`],
     [t.ownerProfile.rowDealCount, `${dealInfo.dealCount}`],

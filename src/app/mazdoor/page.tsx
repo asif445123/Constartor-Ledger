@@ -13,7 +13,7 @@ import AttendanceModal from "@/components/labor/AttendanceModal";
 import LaborExpenseModal from "@/components/labor/LaborExpenseModal";
 import LaborProfileModal from "@/components/labor/LaborProfileModal";
 import { DeleteIcon } from "@/components/ui/icons";
-import { Labor } from "@/lib/types";
+import { Labor, getDisplayDayName } from "@/lib/types";
 
 type ModalKind = "form" | "attendance" | "expense" | "profile" | "attHistory" | "expHistory" | null;
 
@@ -109,7 +109,7 @@ export default function MazdoorPage() {
       </div>
 
       <div className="bg-white rounded-lg border border-[var(--color-line)] overflow-x-auto">
-        <table dir={locale === "en" ? "ltr" : "rtl"} className="ledger-table" style={{ textAlign: locale === "en" ? "left" : "right" }}>
+        <table className="ledger-table">
           <thead>
             <tr>
               <th>{t.mazdoor.colName}</th>
@@ -172,7 +172,7 @@ export default function MazdoorPage() {
         items={(activeLabor?.attendance ?? []).map((a) => (
           <>
             <span>{a.date}</span>
-            <span className="text-[var(--color-ink-soft)]">{a.day}</span>
+            <span className="text-[var(--color-ink-soft)]">{getDisplayDayName(a.date, locale)}</span>
           </>
         ))}
       />
@@ -185,7 +185,7 @@ export default function MazdoorPage() {
         items={(activeLabor?.expenses ?? []).map((e) => (
           <>
             <span>
-              {e.date} <span className="text-[var(--color-ink-soft)]">({e.day})</span>
+              {e.date} <span className="text-[var(--color-ink-soft)]">({getDisplayDayName(e.date, locale)})</span>
             </span>
             <span className="font-ledger font-semibold">
               {e.amount.toLocaleString()} <span className="text-[var(--color-ink-soft)] font-normal">— {e.note}</span>
