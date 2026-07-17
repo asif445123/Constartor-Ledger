@@ -23,6 +23,11 @@ export interface RegisterResult {
   message?: string;
 }
 
+export interface UpdateProfileResult {
+  ok: boolean;
+  message?: string;
+}
+
 interface AuthContextValue {
   user: AuthUser | null;
   loggedIn: boolean;
@@ -31,6 +36,12 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<LoginResult>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateProfile: (
+    name: string,
+    email: string,
+    currentPassword?: string,
+    newPassword?: string
+  ) => Promise<UpdateProfileResult>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -109,9 +120,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   }, []);
 
+  const updateProfile = useCallback(
+    async (
+      name: string,
+      email: string,
+      currentPassword?: string,
+      newPassword?: string
+    ): Promise<UpdateProfileResult> => {
+      try {
+        const res = await apiFetch("/api/auth/profile", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, currentPassword, newPassword }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return { ok: false, message: data.message || t.authContext.loginFailed };
+        }
+        setUser(data.user);
+        return { ok: true, message: data.message };
+      } catch {
+        return { ok: false, message: t.authContext.serverUnreachable };
+      }
+    },
+    [t]
+  );
+
   return (
     <AuthContext.Provider
-      value={{ user, loggedIn: !!user, checking, register, login, logout, refreshUser }}
+      value={{ user, loggedIn: !!user, checking, register, login, logout, refreshUser, updateProfile }}
     >
       {children}
     </AuthContext.Provider>

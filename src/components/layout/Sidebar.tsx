@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useData } from "@/context/DataContext";
 import { useLanguage } from "@/context/LanguageContext";
+import SettingsModal from "@/components/settings/SettingsModal";
+import ThemeModal from "@/components/theme/ThemeModal";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -13,6 +15,8 @@ export default function Sidebar() {
   const { logout, user } = useAuth();
   const { isDemo, exitDemoMode } = useData();
   const { t, locale, setLocale } = useLanguage();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
 
   const NAV = [
     { href: "/", label: t.sidebar.dashboard, icon: "📊" },
@@ -22,7 +26,7 @@ export default function Sidebar() {
     { href: "/site", label: t.sidebar.sites, icon: "🏗️" },
   ];
 
-  const nav = user?.role === "admin" ? [...NAV, { href: "/admin", label: t.sidebar.admin, icon: "🛡️" }] : NAV;
+  const adminItem = user?.role === "admin" ? { href: "/admin", label: t.sidebar.admin, icon: "🛡️" } : null;
 
   const handleLogout = async () => {
     if (isDemo) {
@@ -49,7 +53,7 @@ export default function Sidebar() {
       )}
 
       <nav className="flex md:flex-col flex-1 overflow-x-auto md:overflow-visible">
-        {nav.map((item) => {
+        {NAV.map((item) => {
           const active = pathname === item.href;
           return (
             <Link
@@ -66,6 +70,28 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        <button
+          onClick={() => setThemeOpen(true)}
+          className="flex items-center gap-2 px-5 py-3.5 text-sm whitespace-nowrap border-b border-white/5 md:border-b-0 md:border-r-4 md:border-transparent text-white/75 hover:bg-white/5 transition"
+        >
+          <span>🎨</span>
+          <span>{t.theme.sidebarButton}</span>
+        </button>
+
+        {adminItem && (
+          <Link
+            href={adminItem.href}
+            className={`flex items-center gap-2 px-5 py-3.5 text-sm whitespace-nowrap border-b border-white/5 md:border-b-0 md:border-r-4 transition ${
+              pathname === adminItem.href
+                ? "md:border-[var(--color-accent)] bg-white/10 text-[var(--color-accent)] font-semibold"
+                : "md:border-transparent text-white/75 hover:bg-white/5"
+            }`}
+          >
+            <span>{adminItem.icon}</span>
+            <span>{adminItem.label}</span>
+          </Link>
+        )}
       </nav>
 
       <div className="px-4 py-3 md:px-5 md:py-4 border-t border-white/10">
@@ -82,6 +108,14 @@ export default function Sidebar() {
           >
             🌐 {locale === "ur" ? "English" : "اردو"}
           </button>
+          {!isDemo && (
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className="text-white/60 hover:text-[var(--color-accent)] text-xs"
+            >
+              ⚙️ {t.settings.sidebarButton}
+            </button>
+          )}
           <button
             onClick={handleLogout}
             className="text-white/60 hover:text-[var(--color-rust)] text-sm"
@@ -90,6 +124,9 @@ export default function Sidebar() {
           </button>
         </div>
       </div>
+
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <ThemeModal open={themeOpen} onClose={() => setThemeOpen(false)} />
     </aside>
   );
 }

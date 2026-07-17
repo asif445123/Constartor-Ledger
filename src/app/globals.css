@@ -17,6 +17,63 @@
   --font-mono: "Noto Nastaliq Urdu";
 }
 
+/* ── Theme variants — selected via data-theme on <html> ── */
+html[data-theme="emerald"] {
+  --color-bg: #07211a;
+  --color-bg-soft: #0e3327;
+  --color-paper: #f6faf5;
+  --color-paper-alt: #e7f3e3;
+  --color-ink: #132420;
+  --color-ink-soft: #3f5a4f;
+  --color-line: #bcd9c6;
+  --color-accent: #2f9e6e;
+  --color-accent-dark: #1f7d54;
+  --color-rust: #c1533a;
+  --color-green: #2f9e6e;
+}
+
+html[data-theme="ocean"] {
+  --color-bg: #071b2e;
+  --color-bg-soft: #0f2e4a;
+  --color-paper: #f5f9fc;
+  --color-paper-alt: #e3edf5;
+  --color-ink: #132433;
+  --color-ink-soft: #44586b;
+  --color-line: #bcd3e6;
+  --color-accent: #2f7fb0;
+  --color-accent-dark: #1f6390;
+  --color-rust: #c1533a;
+  --color-green: #3e7c5a;
+}
+
+html[data-theme="royal"] {
+  --color-bg: #180b2e;
+  --color-bg-soft: #2a1449;
+  --color-paper: #f9f6fc;
+  --color-paper-alt: #ece2f5;
+  --color-ink: #221433;
+  --color-ink-soft: #584a6b;
+  --color-line: #d6c3e6;
+  --color-accent: #8b4fc4;
+  --color-accent-dark: #6f38a3;
+  --color-rust: #b14d33;
+  --color-green: #3e7c5a;
+}
+
+html[data-theme="rustic"] {
+  --color-bg: #241209;
+  --color-bg-soft: #3a1f0f;
+  --color-paper: #fbf6ef;
+  --color-paper-alt: #f3e4d1;
+  --color-ink: #2b1a10;
+  --color-ink-soft: #5c483a;
+  --color-line: #e0c4a3;
+  --color-accent: #c1633b;
+  --color-accent-dark: #9c4c2b;
+  --color-rust: #c1633b;
+  --color-green: #4a7c59;
+}
+
 @theme inline {
   --color-bg: var(--color-bg);
   --color-bg-soft: var(--color-bg-soft);

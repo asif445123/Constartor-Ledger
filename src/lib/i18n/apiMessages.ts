@@ -26,6 +26,10 @@ export const apiMessages = {
     enterDate: "تاریخ درج کریں",
     fillItemAmountSite: "آئٹم، رقم اور سائٹ لکھیں!",
     expenseNotFound: "خرچہ نہیں ملا",
+    currentPasswordRequired: "نیا پاسورڈ سیٹ کرنے کے لیے موجودہ پاسورڈ درج کریں",
+    currentPasswordWrong: "موجودہ پاسورڈ درست نہیں ہے",
+    profileUpdated: "پروفائل اپڈیٹ ہو گئی",
+    profileUpdateError: "پروفائل اپڈیٹ کرنے میں خرابی پیش آئی",
   },
   en: {
     loginRequired: "Login required",
@@ -50,6 +54,10 @@ export const apiMessages = {
     enterDate: "Please enter a date",
     fillItemAmountSite: "Please fill in item, amount, and site!",
     expenseNotFound: "Expense not found",
+    currentPasswordRequired: "Enter your current password to set a new one",
+    currentPasswordWrong: "Current password is incorrect",
+    profileUpdated: "Profile updated",
+    profileUpdateError: "Error updating profile",
   },
 } as const;
 

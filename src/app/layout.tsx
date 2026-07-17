@@ -6,6 +6,7 @@ import { ToastProvider } from "@/components/ui/Toast";
 import { ConfirmProvider } from "@/components/ui/ConfirmProvider";
 import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import AppShell from "@/components/layout/AppShell";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://constartor-ledger.onrender.com";
@@ -115,17 +116,19 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-full antialiased">
-        <LanguageProvider>
-          <ToastProvider>
-            <ConfirmProvider>
-              <AuthProvider>
-                <DataProvider>
-                  <AppShell>{children}</AppShell>
-                </DataProvider>
-              </AuthProvider>
-            </ConfirmProvider>
-          </ToastProvider>
-        </LanguageProvider>
+       <ThemeProvider>
+          <LanguageProvider>
+            <ToastProvider>
+              <ConfirmProvider>
+                <AuthProvider>
+                  <DataProvider>
+                    <AppShell>{children}</AppShell>
+                  </DataProvider>
+                </AuthProvider>
+              </ConfirmProvider>
+            </ToastProvider>
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
