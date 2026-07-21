@@ -31,14 +31,7 @@ export default function DashboardPage() {
       />
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <StatCard eyebrow={t.dashboard.income} label={t.dashboard.totalReceived} value={totalReceived.toLocaleString()} tone="positive" />
-        <StatCard eyebrow={t.dashboard.expenses} label={t.dashboard.totalKharcha} value={totalKharcha.toLocaleString()} tone="negative" />
-        <StatCard
-          eyebrow={t.dashboard.balance}
-          label={t.dashboard.totalBalance}
-          value={balance.toLocaleString()}
-          tone={balance >= 0 ? "positive" : "negative"}
-        />
+      
         <StatCard eyebrow={t.dashboard.contract} label={t.dashboard.totalContract} value={totalNewContract.toLocaleString()} tone="accent" />
         <StatCard eyebrow={t.dashboard.owners} label={t.dashboard.totalFromOwners} value={totalReceived.toLocaleString()} />
         <StatCard
@@ -46,6 +39,14 @@ export default function DashboardPage() {
           label={t.dashboard.remainingFromOwners}
           value={contractBalance.toLocaleString()}
           tone={contractBalance >= 0 ? "positive" : "negative"}
+        />
+         <StatCard eyebrow={t.dashboard.income} label={t.dashboard.totalReceived} value={totalReceived.toLocaleString()} tone="positive" />
+        <StatCard eyebrow={t.dashboard.expenses} label={t.dashboard.totalKharcha} value={totalKharcha.toLocaleString()} tone="negative" />
+        <StatCard
+          eyebrow={t.dashboard.balance}
+          label={t.dashboard.totalBalance}
+          value={balance.toLocaleString()}
+          tone={balance >= 0 ? "positive" : "negative"}
         />
       </div>
 
