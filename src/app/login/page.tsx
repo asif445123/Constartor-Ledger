@@ -7,10 +7,10 @@ import { useData } from "@/context/DataContext";
 import { useLanguage } from "@/context/LanguageContext";
 import "./auth.css";
 
-type ScreenState = "form" | "pending" | "rejected";
+type ScreenState = "form" | "pending" | "rejected" | "forgot";
 
 export default function LoginPage() {
-  const { login, register } = useAuth();
+  const { login, register, forgotPassword } = useAuth();
   const { enterDemoMode } = useData();
   const { t, locale, setLocale } = useLanguage();
   const router = useRouter();
@@ -18,11 +18,17 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState({ text: "", type: "" });
   const [screen, setScreen] = useState<ScreenState>("form");
+
+  // ── forgot-password screen state ──
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState<{ text: string; link?: string | null } | null>(null);
 
   // ─────────────────────────────────────────────
   //  VALIDATE FORM
@@ -60,10 +66,9 @@ export default function LoginPage() {
     setMessage({ text: "", type: "" });
 
     if (isLoginMode) {
-      const result = await login(email, password);
+      const result = await login(email, password, rememberMe);
       if (result.ok) {
         setMessage({ text: t.login.loggedIn, type: "success" });
-        router.replace("/");
       } else if (result.reason === "pending") {
         setScreen("pending");
       } else if (result.reason === "rejected") {
@@ -93,6 +98,19 @@ export default function LoginPage() {
   };
 
   // ─────────────────────────────────────────────
+  //  FORGOT PASSWORD SUBMIT
+  // ─────────────────────────────────────────────
+  const handleForgotSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!forgotEmail) return;
+    setForgotLoading(true);
+    setForgotMessage(null);
+    const result = await forgotPassword(forgotEmail);
+    setForgotMessage({ text: result.message || "", link: result.resetLink });
+    setForgotLoading(false);
+  };
+
+  // ─────────────────────────────────────────────
   //  SWITCH MODE
   // ─────────────────────────────────────────────
   const switchMode = () => {
@@ -103,6 +121,12 @@ export default function LoginPage() {
     setPassword("");
     setFullName("");
     setScreen("form");
+  };
+
+  const openForgot = () => {
+    setForgotEmail(email);
+    setForgotMessage(null);
+    setScreen("forgot");
   };
 
   // ─────────────────────────────────────────────
@@ -152,6 +176,57 @@ export default function LoginPage() {
                   {t.login.viewDemo}
                 </button>
               </div>
+            ) : screen === "forgot" ? (
+              <>
+                <h2 className="auth-title font-display">{t.login.forgotPasswordTitle}</h2>
+                <p className="auth-subtitle">{t.login.forgotPasswordSubtitle}</p>
+
+                {forgotMessage && (
+                  <div className="message success">
+                    <p>{forgotMessage.text}</p>
+                    {forgotMessage.link && (
+                      <>
+                        <p style={{ marginTop: 8, fontSize: "0.85em", opacity: 0.85 }}>
+                          {t.login.resetLinkNote}
+                        </p>
+                        <a
+                          href={forgotMessage.link}
+                          className="link-button"
+                          style={{ wordBreak: "break-all", display: "block", marginTop: 4 }}
+                        >
+                          {forgotMessage.link}
+                        </a>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                <form onSubmit={handleForgotSubmit} className="auth-form">
+                  <div className="form-group">
+                    <label htmlFor="forgotEmail">{t.login.email}</label>
+                    <div className="input-wrapper">
+                      <span className="input-icon">✉️</span>
+                      <input
+                        id="forgotEmail"
+                        type="email"
+                        placeholder={t.login.emailPlaceholder}
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        disabled={forgotLoading}
+                      />
+                    </div>
+                  </div>
+
+                  <button type="submit" className="submit-button" disabled={forgotLoading}>
+                    {forgotLoading && <span className="spinner" />}
+                    {t.login.sendResetLink}
+                  </button>
+                </form>
+
+                <button className="link-button" onClick={() => setScreen("form")} style={{ marginTop: 12 }}>
+                  {t.login.backToLoginFromForgot}
+                </button>
+              </>
             ) : (
               <>
                 {/* ── TITLE ── */}
@@ -224,6 +299,31 @@ export default function LoginPage() {
                     </div>
                     {errors.password && <div className="error-text">{errors.password}</div>}
                   </div>
+
+                  {isLoginMode && (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        margin: "-4px 0 4px",
+                        fontSize: "0.85em",
+                      }}
+                    >
+                      <label style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}>
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                          disabled={isLoading}
+                        />
+                        {t.login.rememberMe}
+                      </label>
+                      <button type="button" className="link-button" onClick={openForgot}>
+                        {t.login.forgotPasswordLink}
+                      </button>
+                    </div>
+                  )}
 
                   <button type="submit" className="submit-button" disabled={isLoading}>
                     {isLoading && <span className="spinner" />}

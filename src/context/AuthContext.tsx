@@ -28,12 +28,24 @@ export interface UpdateProfileResult {
   message?: string;
 }
 
+export interface ForgotPasswordResult {
+  ok: boolean;
+  message?: string;
+  resetLink?: string | null;
+}
+
+export interface ResetPasswordResult {
+  ok: boolean;
+  message?: string;
+}
+
 interface AuthContextValue {
   user: AuthUser | null;
   loggedIn: boolean;
   checking: boolean;
   register: (name: string, email: string, password: string) => Promise<RegisterResult>;
-  login: (email: string, password: string) => Promise<LoginResult>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<LoginResult>;
+  adminLogin: (password: string, rememberMe?: boolean) => Promise<LoginResult>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   updateProfile: (
@@ -42,6 +54,9 @@ interface AuthContextValue {
     currentPassword?: string,
     newPassword?: string
   ) => Promise<UpdateProfileResult>;
+  forgotPassword: (email: string) => Promise<ForgotPasswordResult>;
+  adminForgotPassword: () => Promise<ForgotPasswordResult>;
+  resetPassword: (token: string, password: string) => Promise<ResetPasswordResult>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -97,23 +112,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [t]
   );
 
-  const login = useCallback(async (email: string, password: string): Promise<LoginResult> => {
-    try {
-      const res = await apiFetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        return { ok: false, reason: data.reason, message: data.message || t.authContext.loginFailed };
+  const login = useCallback(
+    async (email: string, password: string, rememberMe?: boolean): Promise<LoginResult> => {
+      try {
+        const res = await apiFetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, rememberMe }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return { ok: false, reason: data.reason, message: data.message || t.authContext.loginFailed };
+        }
+        setUser(data.user);
+        return { ok: true };
+      } catch {
+        return { ok: false, message: t.authContext.serverUnreachable };
       }
-      setUser(data.user);
-      return { ok: true };
-    } catch {
-      return { ok: false, message: t.authContext.serverUnreachable };
-    }
-  }, [t]);
+    },
+    [t]
+  );
+
+  const adminLogin = useCallback(
+    async (password: string, rememberMe?: boolean): Promise<LoginResult> => {
+      try {
+        const res = await apiFetch("/api/auth/admin-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password, rememberMe }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return { ok: false, message: data.message || t.authContext.loginFailed };
+        }
+        setUser(data.user);
+        return { ok: true };
+      } catch {
+        return { ok: false, message: t.authContext.serverUnreachable };
+      }
+    },
+    [t]
+  );
 
   const logout = useCallback(async () => {
     await apiFetch("/api/auth/logout", { method: "POST" });
@@ -146,9 +185,75 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [t]
   );
 
+  const forgotPassword = useCallback(
+    async (email: string): Promise<ForgotPasswordResult> => {
+      try {
+        const res = await apiFetch("/api/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return { ok: false, message: data.message || t.authContext.loginFailed };
+        }
+        return { ok: true, message: data.message, resetLink: data.resetLink };
+      } catch {
+        return { ok: false, message: t.authContext.serverUnreachable };
+      }
+    },
+    [t]
+  );
+
+  const adminForgotPassword = useCallback(async (): Promise<ForgotPasswordResult> => {
+    try {
+      const res = await apiFetch("/api/auth/admin-forgot-password", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        return { ok: false, message: data.message || t.authContext.loginFailed };
+      }
+      return { ok: true, message: data.message, resetLink: data.resetLink };
+    } catch {
+      return { ok: false, message: t.authContext.serverUnreachable };
+    }
+  }, [t]);
+
+  const resetPassword = useCallback(
+    async (token: string, password: string): Promise<ResetPasswordResult> => {
+      try {
+        const res = await apiFetch("/api/auth/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          return { ok: false, message: data.message || t.authContext.loginFailed };
+        }
+        return { ok: true, message: data.message };
+      } catch {
+        return { ok: false, message: t.authContext.serverUnreachable };
+      }
+    },
+    [t]
+  );
+
   return (
     <AuthContext.Provider
-      value={{ user, loggedIn: !!user, checking, register, login, logout, refreshUser, updateProfile }}
+      value={{
+        user,
+        loggedIn: !!user,
+        checking,
+        register,
+        login,
+        adminLogin,
+        logout,
+        refreshUser,
+        updateProfile,
+        forgotPassword,
+        adminForgotPassword,
+        resetPassword,
+      }}
     >
       {children}
     </AuthContext.Provider>

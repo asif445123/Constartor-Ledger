@@ -8,6 +8,8 @@ export interface IUser {
   role: "user" | "admin";
   status: "pending" | "approved" | "rejected";
   createdAt: Date;
+  resetTokenHash?: string;
+  resetTokenExpiry?: Date;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -17,6 +19,8 @@ const UserSchema = new Schema<IUser>({
   role: { type: String, enum: ["user", "admin"], default: "user" },
   status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
   createdAt: { type: Date, default: Date.now },
+  resetTokenHash: { type: String, select: false },
+  resetTokenExpiry: { type: Date, select: false },
 });
 
 export default (models.User as mongoose.Model<IUser>) || model<IUser>("User", UserSchema);

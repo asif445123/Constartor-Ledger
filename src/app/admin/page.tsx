@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/Toast";
 import { useLanguage } from "@/context/LanguageContext";
 import { apiFetch } from "@/lib/apiFetch";
 import { PageHeader, StatCard } from "@/components/ui/StatCard";
+import AdminLoginGate from "@/components/admin/AdminLoginGate";
 
 interface AdminUser {
   _id: string;
@@ -18,7 +19,7 @@ interface AdminUser {
 }
 
 export default function AdminPage() {
-  const { user } = useAuth();
+  const { user, loggedIn, checking } = useAuth();
   const { showToast } = useToast();
   const { t } = useLanguage();
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -74,6 +75,12 @@ export default function AdminPage() {
     } finally {
       setBusyId(null);
     }
+  }
+
+  if (checking) return null;
+
+  if (!loggedIn) {
+    return <AdminLoginGate />;
   }
 
   if (user?.role !== "admin") {
