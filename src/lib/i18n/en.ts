@@ -50,7 +50,7 @@ export const en = {
     rejectedTitle: "Access Denied",
     rejectedMessage: "Your account was rejected by the admin,Please contact on WhatsApp or Email for approval.",
     pendingTitle: "Awaiting Approval",
-    pendingMessage: "Your account has been created. For account approval,Please contact on WhatsApp or Email for approval.",
+    pendingMessage: "Your account has been created. Please contact on WhatsApp or Email for account approval.",
     backToLogin: "← Back to login",
     viewDemo: " Or View Demo",
     fullName: "Full Name",
