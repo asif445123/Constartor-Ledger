@@ -158,7 +158,7 @@ export default function LoginPage() {
                 <div className="status-icon">🚫</div>
                 <h3 className="status-title">{t.login.rejectedTitle}</h3>
                 <p className="status-message">{t.login.rejectedMessage}</p>
-                <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} emailSubject={t.login.rejectedTitle} />
+                <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} />
                 <button className="link-button" onClick={() => setScreen("form")}>
                   {t.login.backToLogin}
                 </button>
@@ -171,7 +171,7 @@ export default function LoginPage() {
                 <div className="status-icon">⏳</div>
                 <h3 className="status-title">{t.login.pendingTitle}</h3>
                 <p className="status-message">{t.login.pendingMessage}</p>
-                <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} emailSubject={t.login.pendingTitle} />
+                <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} />
                 <button className="link-button" onClick={() => setScreen("form")}>
                   {t.login.backToLogin}
                 </button>
@@ -355,10 +355,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="auth-footer">
+        {/* <div className="auth-footer">
           <p className="verse-arabic">{t.login.verseArabic}</p>
           <p className="verse-translation">&quot;{t.login.verseTranslation}&quot;</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

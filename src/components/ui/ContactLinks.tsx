@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
-import { buildWhatsAppLink, buildMailtoLink } from "@/lib/contact";
+import React, { useState } from "react";
+import { buildWhatsAppLink } from "@/lib/contact";
 import { useLanguage } from "@/context/LanguageContext";
+import ContactFormModal from "@/components/contact/ContactFormModal";
 
 interface ContactLinksProps {
   whatsappMessage?: string;
-  emailSubject?: string;
   variant?: "buttons" | "sidebar" | "navItem";
 }
 
@@ -31,8 +31,14 @@ function MailIcon() {
   );
 }
 
-export default function ContactLinks({ whatsappMessage, emailSubject, variant = "buttons" }: ContactLinksProps) {
+// The Email "link" opens a Contact Us form in a modal instead of navigating
+// away — keeps the real address off the page (nothing to scrape) and works
+// for every visitor, not just people with a Google account signed in.
+export default function ContactLinks({ whatsappMessage, variant = "buttons" }: ContactLinksProps) {
   const { t } = useLanguage();
+  const [formOpen, setFormOpen] = useState(false);
+
+  const modal = <ContactFormModal open={formOpen} onClose={() => setFormOpen(false)} />;
 
   if (variant === "navItem") {
     return (
@@ -46,15 +52,15 @@ export default function ContactLinks({ whatsappMessage, emailSubject, variant = 
           <span className="text-[#25d366]"><WhatsAppIcon /></span>
           <span>{t.contact.whatsapp}</span>
         </a>
-        <a
-          href={buildMailtoLink(emailSubject)}
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 px-5 py-3.5 text-sm whitespace-nowrap border-b border-white/5 md:border-b-0 md:border-r-4 md:border-transparent text-white/75 hover:bg-white/5 transition"
+        <button
+          type="button"
+          onClick={() => setFormOpen(true)}
+          className="flex items-center gap-2 px-5 py-3.5 text-sm whitespace-nowrap border-b border-white/5 md:border-b-0 md:border-r-4 md:border-transparent text-white/75 hover:bg-white/5 transition text-left"
         >
           <MailIcon />
           <span>{t.contact.email}</span>
-        </a>
+        </button>
+        {modal}
       </>
     );
   }
@@ -70,14 +76,14 @@ export default function ContactLinks({ whatsappMessage, emailSubject, variant = 
         >
           <span className="text-[#25D366]"><WhatsAppIcon /></span> {t.contact.whatsapp}
         </a>
-        <a
-          href={buildMailtoLink(emailSubject)}
-          target="_blank"
-          rel="noreferrer"
+        <button
+          type="button"
+          onClick={() => setFormOpen(true)}
           className="flex items-center gap-1.5 text-white/60 hover:text-[var(--color-accent)] text-xs"
         >
           <MailIcon /> {t.contact.email}
-        </a>
+        </button>
+        {modal}
       </>
     );
   }
@@ -92,14 +98,14 @@ export default function ContactLinks({ whatsappMessage, emailSubject, variant = 
       >
         <WhatsAppIcon /> {t.contact.whatsapp}
       </a>
-      <a
-        href={buildMailtoLink(emailSubject)}
-        target="_blank"
-        rel="noreferrer"
+      <button
+        type="button"
+        onClick={() => setFormOpen(true)}
         className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[var(--color-accent)] text-[var(--color-ink)] text-sm font-semibold hover:opacity-90"
       >
         <MailIcon /> {t.contact.email}
-      </a>
+      </button>
+      {modal}
     </div>
   );
 }
