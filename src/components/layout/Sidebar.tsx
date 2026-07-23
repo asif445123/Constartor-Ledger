@@ -8,6 +8,7 @@ import { useData } from "@/context/DataContext";
 import { useLanguage } from "@/context/LanguageContext";
 import SettingsModal from "@/components/settings/SettingsModal";
 import ThemeModal from "@/components/theme/ThemeModal";
+import ContactLinks from "@/components/ui/ContactLinks";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -70,6 +71,8 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} variant="navItem" />
 
         <button
           onClick={() => setThemeOpen(true)}

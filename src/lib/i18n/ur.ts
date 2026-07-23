@@ -457,4 +457,10 @@ export const ur = {
     successMessage: "اب آپ نئے پاسورڈ سے لاگ ان کر سکتے ہیں",
     backToLogin: "لاگ ان پر جائیں",
   },
+   contact: {
+    whatsapp: "واٹس ایپ",
+    email: "ای میل",
+    sidebarTitle: "رابطہ کریں",
+    whatsappDefaultMessage: "السلام علیکم، مجھے ٹھیکیدار رجسٹر میں مدد چاہیے۔",
+  },
 } as const;

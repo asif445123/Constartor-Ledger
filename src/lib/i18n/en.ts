@@ -457,4 +457,10 @@ export const en = {
     successMessage: "You can now log in with your new password",
     backToLogin: "Go to Login",
   },
+  contact: {
+    whatsapp: "WhatsApp",
+    email: "Email",
+    sidebarTitle: "Contact Us",
+    whatsappDefaultMessage: "Hi, I need help with Contractor Ledger.",
+  },
 } as const;

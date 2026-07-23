@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useData } from "@/context/DataContext";
 import { useLanguage } from "@/context/LanguageContext";
+import ContactLinks from "@/components/ui/ContactLinks";
 import "./auth.css";
 
 type ScreenState = "form" | "pending" | "rejected" | "forgot";
@@ -157,6 +158,7 @@ export default function LoginPage() {
                 <div className="status-icon">🚫</div>
                 <h3 className="status-title">{t.login.rejectedTitle}</h3>
                 <p className="status-message">{t.login.rejectedMessage}</p>
+                <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} emailSubject={t.login.rejectedTitle} />
                 <button className="link-button" onClick={() => setScreen("form")}>
                   {t.login.backToLogin}
                 </button>
@@ -169,6 +171,7 @@ export default function LoginPage() {
                 <div className="status-icon">⏳</div>
                 <h3 className="status-title">{t.login.pendingTitle}</h3>
                 <p className="status-message">{t.login.pendingMessage}</p>
+                <ContactLinks whatsappMessage={t.contact.whatsappDefaultMessage} emailSubject={t.login.pendingTitle} />
                 <button className="link-button" onClick={() => setScreen("form")}>
                   {t.login.backToLogin}
                 </button>
@@ -352,10 +355,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* <div className="auth-footer">
+        <div className="auth-footer">
           <p className="verse-arabic">{t.login.verseArabic}</p>
           <p className="verse-translation">&quot;{t.login.verseTranslation}&quot;</p>
-        </div> */}
+        </div>
       </div>
     </div>
   );
