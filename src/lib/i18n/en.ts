@@ -40,7 +40,7 @@ export const en = {
     siteLedgerLabel: "SITE LEDGER",
     demoModeBanner: "Demo Mode — Sample Data",
     demoUser: "Demo User",
-    welcomeUser: "Welcome",
+    welcomeUser: "Hi",
   },
   login: {
     welcomeTitle: "Welcome 👋",
